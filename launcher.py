@@ -45,7 +45,7 @@ def show_menu():
     print("4. View Documentation")
     print("5. Run Tests")
     print("6. View Help/Playbook")
-    print("7. Version Control Check")
+    print("7. File Backup/Restore")
     print("8. Exit")
     print()
 
@@ -240,192 +240,6 @@ explicitly authorized to test.
     input("Press Enter to continue...")
 
 
-def check_git_remote():
-    """Check the Git remote repository."""
-    print("\nCHECKING GIT REMOTE REPOSITORY")
-    print("=" * 35)
-    
-    try:
-        result = subprocess.run(["git", "--version"], capture_output=True, text=True)
-        if result.returncode != 0:
-            print("Git is not installed or not in PATH")
-            input("Press Enter to continue...")
-            return
-        print(f"Git version: {result.stdout.strip()}")
-    except FileNotFoundError:
-        print("Git is not installed or not in PATH")
-        input("Press Enter to continue...")
-        return
-    
-    # Check if we're in a Git repository
-    result = subprocess.run(["git", "status"], capture_output=True, text=True)
-    in_repo = result.returncode == 0
-    
-    if not in_repo:
-        print("Not in a Git repository")
-        print("Initializing repository with remote...")
-        
-        # Initialize git repo and add the remote
-        subprocess.run(["git", "init"], capture_output=True)
-        subprocess.run(["git", "remote", "add", "origin", "https://github.com/RishuBurnwal/TLS-Bypass.git"], capture_output=True)
-        print("Initialized new repository with remote: https://github.com/RishuBurnwal/TLS-Bypass.git")
-    else:
-        # Check current remote
-        result = subprocess.run(["git", "remote", "-v"], capture_output=True, text=True)
-        if result.returncode == 0 and result.stdout.strip():
-            print("Current remotes:")
-            print(result.stdout)
-        else:
-            # Add the remote if none exists
-            subprocess.run(["git", "remote", "add", "origin", "https://github.com/RishuBurnwal/TLS-Bypass.git"], capture_output=True)
-            print("Added remote: https://github.com/RishuBurnwal/TLS-Bypass.git")
-    
-    # Show the configured remote
-    result = subprocess.run(["git", "remote", "get-url", "origin"], capture_output=True, text=True)
-    if result.returncode == 0:
-        print(f"\nRemote origin URL: {result.stdout.strip()}")
-    else:
-        print("\nNo remote origin configured")
-    
-    input("Press Enter to continue...")
-
-
-def git_version_control():
-    """Handle Git version control operations."""
-    clear_screen()
-    print_header()
-    print("\nGIT VERSION CONTROL")
-    print("=" * 30)
-    
-    # Check if Git is installed
-    try:
-        result = subprocess.run(["git", "--version"], capture_output=True, text=True)
-        if result.returncode != 0:
-            print("Git is not installed or not in PATH")
-            input("Press Enter to continue...")
-            return
-        print(f"Git version: {result.stdout.strip()}")
-    except FileNotFoundError:
-        print("Git is not installed or not in PATH")
-        input("Press Enter to continue...")
-        return
-    
-    # Check if we're in a Git repository
-    result = subprocess.run(["git", "status"], capture_output=True, text=True)
-    in_repo = result.returncode == 0
-    
-    while True:
-        print("\nGIT OPTIONS:")
-        print("1. Check Repository Status")
-        print("2. Show Current Branch")
-        print("3. Show Recent Commits")
-        print("4. Check for Updates (git fetch)")
-        print("5. Pull Latest Changes (git pull)")
-        print("6. Show Project Version")
-        print("7. Check/Update Rule File Version")
-        print("8. Undo/Restore Previous Versions")
-        print("9. Reset Files to Default")
-        print("10. Check Git Remote Repository")
-        print("11. Back to Main Menu")
-        
-        choice = input("\nSelect option (1-11): ").strip()
-        
-        if choice == "1":
-            if in_repo:
-                result = subprocess.run(["git", "status", "--short"], capture_output=True, text=True)
-                if result.stdout.strip():
-                    print("\nUncommitted changes:")
-                    print(result.stdout)
-                else:
-                    print("\nWorking directory is clean")
-            else:
-                print("\nNot in a Git repository")
-        
-        elif choice == "2":
-            if in_repo:
-                result = subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True)
-                print(f"\nCurrent branch: {result.stdout.strip()}")
-            else:
-                print("\nNot in a Git repository")
-        
-        elif choice == "3":
-            if in_repo:
-                result = subprocess.run(["git", "log", "--oneline", "-10"], capture_output=True, text=True)
-                print("\nRecent commits:")
-                print(result.stdout if result.stdout.strip() else "No commits found")
-            else:
-                print("\nNot in a Git repository")
-        
-        elif choice == "4":
-            if in_repo:
-                print("\nFetching updates...")
-                result = subprocess.run(["git", "fetch"], capture_output=True, text=True)
-                if result.returncode == 0:
-                    print("Fetched updates successfully")
-                    # Show if there are updates available
-                    local_result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
-                    remote_result = subprocess.run(["git", "rev-parse", "@{u}"], capture_output=True, text=True)
-                    
-                    if local_result.stdout.strip() != remote_result.stdout.strip():
-                        print("Updates are available!")
-                        print(f"Local:  {local_result.stdout.strip()[:8]}")
-                        print(f"Remote: {remote_result.stdout.strip()[:8]}")
-                    else:
-                        print("Repository is up to date")
-                else:
-                    print(f"Error fetching: {result.stderr}")
-            else:
-                print("\nNot in a Git repository")
-        
-        elif choice == "5":
-            if in_repo:
-                confirm = input("\nThis will pull the latest changes. Continue? (y/N): ").strip().lower()
-                if confirm in ['y', 'yes']:
-                    print("\nPulling latest changes...")
-                    result = subprocess.run(["git", "pull"], capture_output=True, text=True)
-                    if result.returncode == 0:
-                        print("Pulled updates successfully")
-                        print(result.stdout)
-                    else:
-                        print(f"Error pulling: {result.stderr}")
-                else:
-                    print("Pull operation cancelled")
-            else:
-                print("\nNot in a Git repository")
-        
-        elif choice == "6":
-            # Show project version
-            print(f"\nProject Version: 2.0")
-            print(f"Last Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-            if in_repo:
-                result = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
-                if result.returncode == 0:
-                    print(f"Git Commit: {result.stdout.strip()}")
-        
-        elif choice == "7":
-            # Automatically update rule file version and timestamp
-            auto_update_rule_file_version()
-        
-        elif choice == "8":
-            # Undo/Restore previous versions
-            undo_restore_versions()
-        
-        elif choice == "9":
-            # Reset files to default
-            reset_files_to_default()
-        
-        elif choice == "10":
-            # Check Git remote repository
-            check_git_remote()
-        
-        elif choice == "11":
-            break
-        
-        else:
-            print("Invalid option")
-        
-        input("\nPress Enter to continue...")
-
 
 def auto_update_rule_file_version():
     """Automatically update the version and last updated information in the rule file."""
@@ -619,6 +433,155 @@ def reset_files_to_default():
     print("\nAll files have been reset to default state.")
 
 
+def show_rule_file_info():
+    """Show rule file version information without updating."""
+    print("\nRULE FILE INFORMATION")
+    print("=" * 30)
+    
+    rule_file = "tls_bypass_rule.txt"
+    
+    # Check if rule file exists
+    if not os.path.exists(rule_file):
+        print(f"Rule file '{rule_file}' does not exist.")
+        print("No version information available.")
+        return
+    
+    # Read the current rule file to find version and last updated information
+    try:
+        with open(rule_file, 'r', encoding="utf-8") as f:
+            lines = f.readlines()
+        
+        version_line = None
+        last_updated_line = None
+        
+        for i, line in enumerate(lines):
+            if line.startswith("# Version:"):
+                version_line = i
+                print(f"Current Version: {line.strip()}")
+            elif line.startswith("# Last Updated:"):
+                last_updated_line = i
+                print(f"Last Updated: {line.strip()}")
+        
+        if version_line is None and last_updated_line is None:
+            print("No version information found in the rule file.")
+        
+        # Show file stats
+        file_size = os.path.getsize(rule_file)
+        print(f"File Size: {file_size} bytes")
+        
+        # Show backup information
+        backups = get_backup_files()
+        print(f"Available Backups: {len(backups)}")
+        if backups:
+            print(f"Latest Backup: {os.path.basename(backups[0])}")
+        
+    except Exception as e:
+        print(f"Error reading rule file: {e}")
+
+
+def auto_update_rule_file_if_needed():
+    """Automatically update rule file version if needed, without user interaction."""
+    rule_file = "tls_bypass_rule.txt"
+    
+    # Create backup before modification
+    if os.path.exists(rule_file):
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        backup_file = f"tls_bypass_rule_backup_{timestamp}.txt"
+        shutil.copy2(rule_file, backup_file)
+        
+        # Clean up old backups, keeping only the 10 most recent
+        cleanup_old_backups()
+    
+    # Check if rule file exists
+    if not os.path.exists(rule_file):
+        create_default_rule_file(rule_file)
+    
+    # Read the current rule file
+    try:
+        with open(rule_file, 'r', encoding="utf-8") as f:
+            lines = f.readlines()
+        
+        # Find version and last updated information
+        version_line = None
+        last_updated_line = None
+        
+        for i, line in enumerate(lines):
+            if line.startswith("# Version:"):
+                version_line = i
+            elif line.startswith("# Last Updated:"):
+                last_updated_line = i
+        
+        # Automatically update both version and timestamp
+        new_version = "2.0"
+        new_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+        # Update version line
+        if version_line is not None:
+            lines[version_line] = f"# Version: {new_version}\n"
+        else:
+            # Insert after the first line if no version line exists
+            lines.insert(1, f"# Version: {new_version}\n")
+        
+        # Update last updated line
+        if last_updated_line is not None:
+            lines[last_updated_line] = f"# Last Updated: {new_timestamp}\n"
+        else:
+            # Insert after the version line
+            if version_line is not None:
+                insert_pos = version_line + 1
+            else:
+                insert_pos = 2  # Default position if no version line found
+            if len(lines) >= insert_pos:
+                lines.insert(insert_pos, f"# Last Updated: {new_timestamp}\n")
+            else:
+                lines.append(f"# Last Updated: {new_timestamp}\n")
+        
+        # Write back to file
+        with open(rule_file, 'w', encoding="utf-8") as f:
+            f.writelines(lines)
+        
+    except Exception as e:
+        # Silently fail or log error since this is automatic
+        pass  # Or could print to a log file
+
+
+def file_backup_restore():
+    """Handle file backup and restore operations."""
+    clear_screen()
+    print_header()
+    print("\nFILE BACKUP/RESTORE")
+    print("=" * 30)
+    
+    while True:
+        print("\nFILE BACKUP/RESTORE OPTIONS:")
+        print("1. Show Rule File Info")
+        print("2. Restore Previous Version")
+        print("3. Reset Files to Default")
+        print("4. Back to Main Menu")
+        
+        choice = input("\nSelect option (1-4): ").strip()
+        
+        if choice == "1":
+            # Show rule file version information
+            show_rule_file_info()
+        
+        elif choice == "2":
+            # Undo/Restore previous versions
+            undo_restore_versions()
+        
+        elif choice == "3":
+            # Reset files to default
+            reset_files_to_default()
+        
+        elif choice == "4":
+            break
+        
+        else:
+            print("Invalid option")
+        
+        input("\nPress Enter to continue...")
+
+
 def run_cli():
     """Run the CLI interface."""
     print("Starting CLI Interface...")
@@ -673,7 +636,7 @@ def main():
         elif choice == "6":
             view_help()
         elif choice == "7":
-            git_version_control()
+            file_backup_restore()
         elif choice == "8":
             print("\nThank you for using TLS Bypass Rule Manager!")
             print("Remember: Use only for authorized testing.")
