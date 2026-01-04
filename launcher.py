@@ -18,6 +18,7 @@ import os
 import sys
 import subprocess
 import json
+import time
 from datetime import datetime
 
 
@@ -27,13 +28,51 @@ def clear_screen():
 
 
 def print_header():
-    """Print the application header."""
-    print("=" * 60)
-    print("           TLS BYPASS RULE MANAGER - LAUNCHER")
-    print("=" * 60)
-    print("A professional tool for managing TLS bypass/exclusion rules")
-    print("for authorized security testing environments.")
-    print("=" * 60)
+    """Print the application header with loading animation."""
+    print_banner_with_loading()
+
+
+def print_banner_with_loading():
+    """Print an awesome banner with Metasploit-style loading animation."""
+    clear_screen()
+    
+    # Banner art
+    banner = r"""
+  ╔══════════════════════════════════════════════════════════════╗
+  ║                    ╔════════════════╗                      ║
+  ║                    ║ TLS BYPASS     ║                      ║
+  ║                    ║ RULE MANAGER   ║                      ║
+  ║                    ╚════════════════╝                      ║
+  ║                                                              ║
+  ║    ╔═╗┌─┐┌─┐┌─┐┬ ┬┬─┐┌─┐┌┬┐  ╔═╗┬ ┬┬ ┬┬ ┬┬┌─┐            ║
+  ║    ║ ╦├─┤├─┘├─┘│ │├┬┘├┤  │   ╠╣ ││││ │││││└─┐            ║
+  ║    ╚═╝┴ ┴┴  ┴  └─┘┴└─└─┘ ┴   ╚  └┴┘└─┘└┴┘┴└─┘            ║
+  ║                                                              ║
+  ║           [Version 2.0] | [By RishuBurnwal]                ║
+  ║                                                              ║
+  ╚══════════════════════════════════════════════════════════════╝
+    """
+    
+    # Print the banner with color
+    print("\033[94m")  # Blue color
+    print(banner)
+    print("\033[0m")  # Reset color
+    
+    # Loading animation
+    print("\n  \033[93m[*]\033[0m Initializing modules", end="")
+    
+    # Loading dots animation
+    for i in range(5):
+        print(".\033[93m.\033[0m", end="", flush=True)
+        time.sleep(0.5)
+    
+    print("\n  \033[92m[+]\033[0m Modules loaded successfully")
+    print("  \033[92m[+]\033[0m TLS Bypass Rule Manager is ready")
+    print("  \033[92m[+]\033[0m Type: Professional Security Tool")
+    print("  \033[92m[+]\033[0m Status: \033[92mACTIVE\033[0m")
+    
+    # Add some space
+    print()
 
 
 def show_menu():
@@ -616,9 +655,15 @@ def run_gui():
 
 def main():
     """Main function to run the launcher."""
+    first_run = True
     while True:
-        clear_screen()
-        print_header()
+        if first_run:
+            print_banner_with_loading()
+            first_run = False
+        else:
+            clear_screen()
+            print("\nTLS BYPASS RULE MANAGER - LAUNCHER")
+            print("=" * 40)
         show_menu()
         
         choice = input("Enter your choice (1-8): ").strip()
