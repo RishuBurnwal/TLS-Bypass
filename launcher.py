@@ -37,18 +37,23 @@ def print_banner_with_loading():
     clear_screen()
     
     # Banner art
-    banner = r"""
-  ╔══════════════════════════════════════════════════════════════╗
-  ║                TLS BYPASS MANAGER FOR BURPSUITE            ║
-  ║                                                              ║
-  ║    ╔═╗┌─┐┌─┐┌─┐┬ ┬┬─┐┌─┐┌┬┐  ╔═╗┬ ┬┬ ┬┬ ┬┬┌─┐            ║
-  ║    ║ ╦├─┤├─┘├─┘│ │├┬┘├┤  │   ╠╣ ││││ │││││└─┐            ║
-  ║    ╚═╝┴ ┴┴  ┴  └─┘┴└─└─┘ ┴   ╚  └┴┘└─┘└┴┘┴└─┘            ║
-  ║                                                              ║
-  ║                    [By RishuBurnwal]                       ║
-  ║                                                              ║
-  ╚══════════════════════════════════════════════════════════════╝
-    """
+    banner = '''    
+  ╔════════════════════════════════════════════════════════════════════════════════╗
+  ║                               [ TLS-Bypass Manager ]                            ║
+  ║                                        [For BurpSuite]                         ║
+  ║                                                                                  ║
+  ║                                 TOOLS{CyberScorpion}                             ║
+  ║                                                                                 ║
+  ║     ____ ___  _ ____  _____ ___  _  ____  ____ ____  ____  ____  _  ____  _      ║
+  ║  /   _\\  \///  _ \/  __//  __\  / ___\/   _Y  _ \/  __\/  __\/ \/  _ \/ \  /|    ║
+  ║  |  /   \  / | | //|  \  |  \/|  |    \|  / | / \||  \/||  \/|| || / \|| |\ ||   ║
+  ║  |  \__ / /  | |_\\|  /_ |    /  \___ ||  \_| \_/||    /|  __/| || \_/|| | \||     ║
+  ║  \____//_/   \____/\____\\_/\_\  \____/\____|____/\_/\_\\_/   \_/\____/\_/  \|   ║
+  ║                                                                                    ║
+  ║                                                                                   ║
+  ║                        [ Made By RishuBurnwal ❤️ ]                              ║
+  ║                                                                                   ║
+  ╚══════════════════════════════════════════════════════════════════════════════════╝'''
     
     # Print the banner with color
     print("\033[94m")  # Blue color
@@ -64,8 +69,8 @@ def print_banner_with_loading():
         time.sleep(0.5)
     
     print("\n  \033[92m[+]\033[0m Modules loaded successfully")
-    print("  \033[92m[+]\033[0m TLS Bypass Rule Manager is ready")
-    print("  \033[92m[+]\033[0m Type: Professional Security Tool")
+    print("  \033[92m[+]\033[0m TLS-Bypass Manager is ready")
+    print("  \033[92m[+]\033[0m Type: BurpSuite Security Tool")
     print("  \033[92m[+]\033[0m Status: \033[92mACTIVE\033[0m")
     
     # Add some space
@@ -659,7 +664,7 @@ def main():
             first_run = False
         else:
             clear_screen()
-            print("\nTLS BYPASS MANAGER FOR BURPSUITE - LAUNCHER")
+            print("\nTLS-Bypass Manager - LAUNCHER")
             print("=" * 40)
         show_menu()
         
