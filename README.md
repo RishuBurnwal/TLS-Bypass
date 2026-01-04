@@ -1,4 +1,4 @@
-# 🛡️ TLS Bypass Rule Manager
+# 🛡️ TLS Bypass Manager for BurpSuite
 
 > A professional, open-source tool for managing TLS bypass/exclusion rules for authorized security testing environments. This tool helps security professionals and bug bounty hunters manage rule files for tools like Burp Suite, without bypassing TLS or intercepting traffic directly.
 
@@ -19,13 +19,14 @@
 - ✅ **Burp Suite Integration**: Safe auto-sync file generation
 - ✅ **Export/Import**: Support for multiple formats (TXT, JSON, YAML)
 - ✅ **Cross-Platform**: Works on Windows, Linux, and macOS
-- ✅ **Version Control**: Automatic backup and restore functionality
+- ✅ **File Version Control**: Automatic backup and restore functionality
 - ✅ **Undo/Redo**: Up to 10 previous versions maintained
+- ✅ **Awesome Banner**: CyberScorpion-themed startup banner with loading animation
 
 ## 🛠️ Installation
 
 ```bash
-git clone https://github.com/rishuburnwal/TLS-Bypass.git
+git clone https://github.com/RishuBurnwal/TLS-Bypass.git
 cd TLS-Bypass
 cd tls-bypass-rule-manager
 pip install -r requirements.txt
@@ -86,24 +87,17 @@ SELECT AN OPTION:
 4. View Documentation
 5. Run Tests
 6. View Help/Playbook
-7. Version Control Check
+7. File Backup/Restore
 8. Exit
 ```
 
-### Version Control Menu
+### File Backup/Restore Menu
 ```
-GIT OPTIONS:
-1. Check Repository Status
-2. Show Current Branch
-3. Show Recent Commits
-4. Check for Updates (git fetch)
-5. Pull Latest Changes (git pull)
-6. Show Project Version
-7. Check/Update Rule File Version
-8. Undo/Restore Previous Versions
-9. Reset Files to Default
-10. Check Git Remote Repository
-11. Back to Main Menu
+FILE BACKUP/RESTORE OPTIONS:
+1. Show Rule File Info
+2. Restore Previous Version
+3. Reset Files to Default
+4. Back to Main Menu
 ```
 
 ## 🛡️ Ethics & Safety
@@ -202,7 +196,7 @@ The tool automatically creates a `burp_tls_autosync.txt` file containing only en
 - **Author**: Rishu Burnwal
 - **LinkedIn**: [RishuBurnwal](https://linkedin.com/in/rishuburnwal)
 - **GitHub**: [RishuBurnwal](https://github.com/rishuburnwal)
-- **Repository**: [https://github.com/rishuburnwal/TLS-Bypass](https://github.com/rishuburnwal/TLS-Bypass)
+- **Repository**: [https://github.com/rishuBurnwal/TLS-Bypass](https://github.com/rishuBurnwal/TLS-Bypass)
 
 ## 📄 License
 
@@ -210,4 +204,4 @@ MIT License - see the LICENSE file for details.
 
 ## 🚀 Deployment
 
-Ready for GitHub upload at: [https://github.com/rishuburnwal/TLS-Bypass](https://github.com/rishuburnwal/TLS-Bypass)
+Ready for GitHub upload at: [https://github.com/rishuBurnwal/TLS-Bypass](https://github.com/rishuBurnwal/TLS-Bypass)
