@@ -39,16 +39,13 @@ def print_banner_with_loading():
     # Banner art
     banner = r"""
   ╔══════════════════════════════════════════════════════════════╗
-  ║                    ╔════════════════╗                      ║
-  ║                    ║ TLS BYPASS     ║                      ║
-  ║                    ║ RULE MANAGER   ║                      ║
-  ║                    ╚════════════════╝                      ║
+  ║                TLS BYPASS MANAGER FOR BURPSUITE            ║
   ║                                                              ║
   ║    ╔═╗┌─┐┌─┐┌─┐┬ ┬┬─┐┌─┐┌┬┐  ╔═╗┬ ┬┬ ┬┬ ┬┬┌─┐            ║
   ║    ║ ╦├─┤├─┘├─┘│ │├┬┘├┤  │   ╠╣ ││││ │││││└─┐            ║
   ║    ╚═╝┴ ┴┴  ┴  └─┘┴└─└─┘ ┴   ╚  └┴┘└─┘└┴┘┴└─┘            ║
   ║                                                              ║
-  ║           [Version 2.0] | [By RishuBurnwal]                ║
+  ║                    [By RishuBurnwal]                       ║
   ║                                                              ║
   ╚══════════════════════════════════════════════════════════════╝
     """
@@ -662,7 +659,7 @@ def main():
             first_run = False
         else:
             clear_screen()
-            print("\nTLS BYPASS RULE MANAGER - LAUNCHER")
+            print("\nTLS BYPASS MANAGER FOR BURPSUITE - LAUNCHER")
             print("=" * 40)
         show_menu()
         
