@@ -1,0 +1,18 @@
+# TLS BYPASS RULE
+# Version: 2.0
+# Last Updated: 2026-01-07 20:59:44.806927
+# For authorized security testing only
+
+[BLOCK_HOSTS]
+
+[BLOCK_RULES]
+incoming.telemetry.mozilla.org
+ads.mozilla.org
+profile.accounts.firefox.com
+token.services.mozilla.com
+api.accounts.firefox.com
+safebrowsing.googleapis.com
+firefox.settings.services.mozilla.com
+push.services.mozilla.com
+ads.mozilla.org
+prod.ohttp-gateway.prod.webservices.mozgcp.net

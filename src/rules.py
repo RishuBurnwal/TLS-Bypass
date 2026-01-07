@@ -351,6 +351,53 @@ class RuleManager:
             return True
         except Exception:
             return False
+    
+    def generate_specific_rules(self, domains: List[str]) -> Dict[str, List[str]]:
+        """Generate specific rules for a list of domains, separating static hosts and targeted regex patterns."""
+        static_hosts = []
+        regex_rules = []
+        
+        for domain in domains:
+            # Check if it's a simple domain (like google.com)
+            if re.match(r'^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]*\.[a-zA-Z]{2,}$', domain):
+                # Add common subdomains as static hosts
+                common_subdomains = ['www', 'mail', 'api', 'cdn', 'static', 'assets', 'media', 'img', 'video', 'download']
+                for subdomain in common_subdomains:
+                    static_hosts.append(f"{subdomain}.{domain}")
+                # Add the base domain as well
+                static_hosts.append(domain)
+            # Check if it's a wildcard pattern that should be more specific
+            elif '*.' in domain or '.*' in domain:
+                # Convert overly broad patterns to more specific ones
+                if '.*\\.google\\.com' in domain:
+                    # More specific Google patterns
+                    regex_rules.extend([
+                        r'.*\.google\.com',
+                        r'.*\.google\.co\.[a-z]{2,3}',
+                        r'.*\.googleapis\.com',
+                        r'.*\.gstatic\.com',
+                        r'.*\.google-analytics\.com',
+                        r'.*\.googletagmanager\.com',
+                        r'.*\.googletagservices\.com',
+                        r'.*\.googleusercontent\.com',
+                        r'.*\.doubleclick\.net'
+                    ])
+                elif '.*\\.mozilla\\.org' in domain or '.*\\.mozilla\\.com' in domain:
+                    # More specific Mozilla patterns
+                    regex_rules.extend([
+                        r'.*\\.mozilla\\.(com|net|org)',
+                        r'.*\\.firefox\\.com',
+                        r'.*\\.addons\\.mozilla\\.org'
+                    ])
+                else:
+                    regex_rules.append(domain)
+            else:
+                static_hosts.append(domain)
+        
+        return {
+            "hosts": static_hosts,
+            "rules": regex_rules
+        }
 
 
 class RuleTemplate:
