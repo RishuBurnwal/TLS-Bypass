@@ -398,6 +398,116 @@ class RuleManager:
             "hosts": static_hosts,
             "rules": regex_rules
         }
+    
+    def convert_host_to_rule(self, host: str, conversion_type: str = "regex") -> str:
+        """
+        Convert a host to either a rule pattern or static host format.
+        
+        Args:
+            host (str): The host to convert
+            conversion_type (str): Either "regex" to convert host to regex pattern or "static" to keep as static host
+        
+        Returns:
+            str: Converted host in the requested format
+        """
+        if conversion_type == "regex":
+            # Convert host to a regex pattern that matches the specific host
+            # Escape special regex characters in the host
+            escaped_host = re.escape(host)
+            return f"^{escaped_host}$"  # Exact match pattern
+        elif conversion_type == "static":
+            # Return as-is for static host (already in correct format)
+            return host
+        else:
+            raise ValueError("conversion_type must be either 'regex' or 'static'")
+    
+    def convert_hosts_list(self, hosts: List[str], conversion_type: str = "regex") -> List[str]:
+        """
+        Convert a list of hosts to either rule patterns or static hosts.
+        
+        Args:
+            hosts (List[str]): List of hosts to convert
+            conversion_type (str): Either "regex" to convert to patterns or "static" to keep as static hosts
+        
+        Returns:
+            List[str]: Converted list of hosts/rules
+        """
+        converted = []
+        for host in hosts:
+            converted.append(self.convert_host_to_rule(host, conversion_type))
+        return converted
+    
+    def batch_convert_file(self, input_file: str = "tls_bypass_rule.txt", output_file: str = "converted_rules.txt", 
+                          target_section: str = "both", conversion_type: str = "regex"):
+        """
+        Batch convert hosts in a rule file to either static hosts or rule patterns.
+        
+        Args:
+            input_file (str): Path to input rule file
+            output_file (str): Path to output file
+            target_section (str): Which section to convert - "hosts", "rules", or "both"
+            conversion_type (str): Either "regex" or "static"
+        
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        try:
+            # Read the current rule file
+            with open(input_file, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            lines = content.splitlines()
+            new_lines = []
+            current_section = None
+            
+            for line in lines:
+                stripped_line = line.strip()
+                
+                if '[BLOCK_HOSTS]' in stripped_line:
+                    current_section = 'hosts'
+                    new_lines.append(line)
+                elif '[BLOCK_RULES]' in stripped_line:
+                    current_section = 'rules'
+                    new_lines.append(line)
+                elif stripped_line and not stripped_line.startswith('#'):
+                    # Process the line if it's in the targeted section
+                    if target_section == 'both' or current_section == target_section:
+                        if conversion_type == 'regex' and current_section == 'hosts':
+                            # Convert static host to exact-match regex pattern
+                            converted = self.convert_host_to_rule(stripped_line, 'regex')
+                            # Add to rules section instead
+                            # We'll handle this differently - add to the same line for now
+                            new_lines.append(converted)
+                        elif conversion_type == 'static' and current_section == 'rules':
+                            # If we want to convert regex rules to static hosts, we need to 
+                            # convert regex back to a possible host form (if it's a simple pattern)
+                            if stripped_line.startswith('^') and stripped_line.endswith('$'):
+                                # Remove ^ and $ for exact match patterns
+                                host = stripped_line[1:-1]
+                                # Unescape regex characters
+                                unescaped_host = re.sub(r'\\(.)', r'\1', host)
+                                new_lines.append(unescaped_host)
+                            else:
+                                # For complex regex, we can't reliably convert to host
+                                new_lines.append(line)  # Keep as is
+                        else:
+                            # No conversion needed
+                            new_lines.append(line)
+                    else:
+                        # Not in targeted section, keep as is
+                        new_lines.append(line)
+                else:
+                    # Keep comments and empty lines as they are
+                    new_lines.append(line)
+            
+            # Write the converted content to output file
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write('\n'.join(new_lines))
+            
+            return True
+        except Exception as e:
+            print(f"Error during batch conversion: {e}")
+            return False
 
 
 class RuleTemplate:
